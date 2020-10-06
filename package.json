@@ -1,6 +1,6 @@
 {
-  "name": "matrix-steam-bot",
-  "description": "A chatbot that reports Steam friend status'",
+  "name": "matrix-steamstatus-bot",
+  "description": "A chatbot that reports Steam friends status'",
   "version": "0.0.1",
   "author": "Nik0kin",
   "bugs": {

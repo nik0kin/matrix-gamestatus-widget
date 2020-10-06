@@ -1,9 +1,10 @@
 import fetch from 'node-fetch';
 
 export enum PersonaState {
+  OFFLINE = 0,
   ONLINE = 1,
-  OFFLINE = 2,
   AWAY = 3,
+  AWAY_ZZZ = 4, // ??? set away status or away a long time?
 }
 
 export interface PlayerSummary {
@@ -27,7 +28,7 @@ export interface PlayerSummary {
   loccityid?: number;
 
   gameextrainfo?: string;
-  gameid?: number;
+  gameid?: string;
 }
 
 export interface PlayerSummariesResponse {

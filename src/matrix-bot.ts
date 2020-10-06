@@ -30,9 +30,9 @@ export function sendMessageToAllJoinedRooms(
         body: message,
         ...(htmlFormattedMessage
           ? {
-            format: 'org.matrix.custom.html',
-            formatted_body: htmlFormattedMessage,
-          }
+              format: 'org.matrix.custom.html',
+              formatted_body: htmlFormattedMessage,
+            }
           : {}),
       });
     });
