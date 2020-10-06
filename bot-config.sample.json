@@ -1,0 +1,11 @@
+{
+  "homeserverUrl": "https://localhost",
+  "matrixAccessToken": "YourSecretAccessToken",
+  "steamWebApiKey": "YourSecretWebApiKey",
+  "steamFriendIdsForStatus": [
+    "steamIdNumber",
+    "anotherSteamIdNumber"
+  ],
+  "pollFrequency": 600,
+  "autoJoin": false
+}
