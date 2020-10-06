@@ -26,6 +26,8 @@ export function getSteamFriendsStatusString(
   friends: PlayerSummary[]
 ) {
   const sortedFriends = friends.sort((f1, f2) => {
+    // TODO alphabetize ties
+
     if (
       f1.personastate === PersonaState.ONLINE &&
       f1.gameid &&

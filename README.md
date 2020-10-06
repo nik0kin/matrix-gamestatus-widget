@@ -1,6 +1,16 @@
 # matrix-steam-bot
+# matrix-steamstatus-bot
+# matrix-steamfriendstatus-bot
 
 Keep an eye on your Steam friends from Matrix.
+
+## Example
+
+```
+Bot: Steam Status:
+ - Joy - Solitaire
+ - Bobby - Offline
+```
 
 ## Develop
 

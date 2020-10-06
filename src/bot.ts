@@ -2,7 +2,10 @@ import { MatrixClient } from 'matrix-bot-sdk';
 import marked from 'marked';
 
 /* eslint-disable no-console */
-import { createMatrixClient, sendMessageToAllJoinedRooms } from './matrix-bot';
+import {
+  createMatrixClient,
+  sendMessageToJoinedRoomsOrEditExistingMessages,
+} from './matrix-bot';
 import { Settings } from './settings';
 import { getPlayerSummariesFromSteamApi, PlayerSummary } from './steam-api';
 import { getSteamFriendsStatusString } from './message-formatter';
@@ -48,7 +51,11 @@ async function checkSteamFriendsStatus(
   const message = getSteamFriendsStatusString(settings, data);
   console.log(message);
   if (!settings.dryRun) {
-    sendMessageToAllJoinedRooms(botClient, message, marked(message));
+    sendMessageToJoinedRoomsOrEditExistingMessages(
+      botClient,
+      message,
+      marked(message)
+    );
   }
 }
 
