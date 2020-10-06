@@ -32,9 +32,9 @@ export async function sendMessageToRooms(
       body: message,
       ...(htmlFormattedMessage
         ? {
-            format: 'org.matrix.custom.html',
-            formatted_body: htmlFormattedMessage,
-          }
+          format: 'org.matrix.custom.html',
+          formatted_body: htmlFormattedMessage,
+        }
         : {}),
     });
     return [roomId, eventId] as const;
@@ -46,7 +46,7 @@ export async function sendMessageToRooms(
 // Based on https://github.com/matrix-org/matrix-react-sdk/pull/2952/files#diff-e3ff98cfed77f0601d9500761d04d7b9R108-R123
 export async function editExistingMessages(
   client: MatrixClient,
-  messageRoomAndEventIds: string[][],
+  messageRoomAndEventIds: Array<[string, string]>,
   message: string,
   htmlFormattedMessage?: string
 ): Promise<Array<[string, string]>> {
@@ -71,8 +71,8 @@ export async function editExistingMessages(
         newContent
       );
 
-      const eventId = await client.sendMessage(roomId, content);
-      return [roomId, eventId] as const;
+      await client.sendMessage(roomId, content); // we dont care about the new eventId
+      return [roomId, originalMessageEventId] as const;
     }
   );
 
@@ -91,12 +91,14 @@ const comparator = (value: string | string[], other: string | string[]) => {
   return isEqual(a1, a2);
 };
 
+// TODO logic to handle if bot was removed from room?
+
 export async function sendMessageToJoinedRoomsOrEditExistingMessages(
   client: MatrixClient,
   message: string,
   htmlFormattedMessage?: string
 ) {
-  let existingMessagesRoomAndEventIds: string[][] = [];
+  let existingMessagesRoomAndEventIds: Array<[string, string]> = [];
   const result = (client.storageProvider as SimpleFsStorageProvider).readValue(
     MESSAGES_KEY
   );
