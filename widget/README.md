@@ -1,38 +1,36 @@
-# create-svelte
+# matrix-gamestatus-bot
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Keep an eye on your Steam friends from Matrix.
 
-## Creating a project
+## Example
 
-If you're seeing this, you've probably already done this step. Congrats!
+Imagine steam friendlist but on a simple html page embedded in matrix room widget.
 
-```bash
-# create a new project in the current directory
-npm init svelte
+## Develop
 
-# create a new project in my-app
-npm init svelte my-app
+```
+yarn install
+yarn dev --open
 ```
 
-## Developing
+## Run
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+### Bootstrap mode
 
-```bash
-npm run dev
+Use node 16+
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```
+# clone repo
+yarn install
+
+yarn build
+
+# create & configure .env
+
+yarn global add pm2
+pm2 start pm2.config.js
 ```
 
-## Building
+## Config
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+TODO

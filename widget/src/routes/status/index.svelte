@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { PlayerSummary } from './_steam-api';
+  import { PersonaState } from './_steam-api';
   import { getSortedList, getStatus } from './_status-helpers';
 
   export let playerSummaries: PlayerSummary[];
@@ -15,7 +16,12 @@
 
   <ul>
     {#each getSortedList(playerSummaries) as playerSummary}
-      <li>{playerSummary.personaname} - {getStatus(playerSummary)}</li>
+      <li
+        class:away={playerSummary.personastate === PersonaState.AWAY || playerSummary.personastate === PersonaState.AWAY_ZZZ}
+        class:offline={playerSummary.personastate === PersonaState.OFFLINE}
+      >
+        {playerSummary.personaname} - {getStatus(playerSummary)}
+      </li>
     {/each}
   </ul>
 </div>
@@ -33,5 +39,13 @@
 
   li {
     margin-bottom: 8px;
+  }
+
+  li.away {
+    opacity: 20%;
+  }
+
+  li.offline {
+    opacity: 20%;
   }
 </style>

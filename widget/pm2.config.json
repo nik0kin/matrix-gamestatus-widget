@@ -1,0 +1,10 @@
+{
+  "apps": [
+    {
+      "name": "matrix-gamestatus-widget",
+      "script": "PORT=3044 node build",
+      "instances": 1,
+      "exec_mode": "fork"
+    }
+  ]
+}
