@@ -4,27 +4,35 @@
   import { getSortedList, getStatus } from './_status-helpers';
 
   export let playerSummaries: PlayerSummary[];
+  export let error: string | undefined;
 </script>
 
 <svelte:head>
   <title>Steam Status'</title>
-  <meta name="description" content="A todo list app" />
+  <meta name="description" content="A list of friend's steam status" />
 </svelte:head>
 
-<div class="steam-status">
-  <h1>Steam Status'</h1>
+{#if error}
+  <h1> Error </h1>
+  <p>{error}</p>
+{/if}
 
-  <ul>
-    {#each getSortedList(playerSummaries) as playerSummary}
-      <li
-        class:away={playerSummary.personastate === PersonaState.AWAY || playerSummary.personastate === PersonaState.AWAY_ZZZ}
-        class:offline={playerSummary.personastate === PersonaState.OFFLINE}
-      >
-        {playerSummary.personaname} - {getStatus(playerSummary)}
-      </li>
-    {/each}
-  </ul>
-</div>
+{#if !error}
+  <div class="steam-status">
+    <h1>Steam Status'</h1>
+
+    <ul>
+      {#each getSortedList(playerSummaries) as playerSummary}
+        <li
+          class:away={playerSummary.personastate === PersonaState.AWAY || playerSummary.personastate === PersonaState.AWAY_ZZZ}
+          class:offline={playerSummary.personastate === PersonaState.OFFLINE}
+        >
+          {playerSummary.personaname} - {getStatus(playerSummary)}
+        </li>
+      {/each}
+    </ul>
+  </div>
+{/if}
 
 <style>
   .steam-status {
@@ -42,7 +50,7 @@
   }
 
   li.away {
-    opacity: 20%;
+    opacity: 50%;
   }
 
   li.offline {

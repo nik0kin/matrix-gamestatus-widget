@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import { isUserAuthed } from '$lib/auth-cache';
 import { getPlayerSummariesFromSteamApi } from './_steam-api';
 import type { RequestHandler } from './__types';
 
@@ -8,7 +9,14 @@ const config = process.env;
 
 /** @type {import('./__types').RequestHandler} */
 export const GET: RequestHandler = async ({ locals }) => {
-  // locals.userid comes from src/hooks.js
+  if (!isUserAuthed(locals.userid)) {
+    return {
+      body: {
+        error: 'Unauthed',
+      },
+    };
+  }
+  console.log(`${locals.userid} authorized to view status`);
 
   let playerSummaries: PlayerSummary[];
   try {
