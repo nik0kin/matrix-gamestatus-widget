@@ -14,7 +14,8 @@ export interface Settings {
 
   /**
    * Allow users from this homeserver to access the game status page
-   *   TODO more options
+   *  Example: matrix.org
+   *   TODO more similar options
    */
   allowlistHomeserver?: string;
 }
