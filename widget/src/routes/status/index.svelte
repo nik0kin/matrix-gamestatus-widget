@@ -1,10 +1,18 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import type { PlayerSummary } from './_steam-api';
   import { PersonaState } from './_steam-api';
   import { getSortedList, getStatus } from './_status-helpers';
 
   export let playerSummaries: PlayerSummary[];
   export let error: string | undefined;
+
+  onMount(() => {
+    // Refresh the page every 60 seconds
+    setTimeout(() => {
+      location.reload();
+    }, 60 * 1000);
+  });
 </script>
 
 <svelte:head>
@@ -13,7 +21,7 @@
 </svelte:head>
 
 {#if error}
-  <h1> Error </h1>
+  <h1>Error</h1>
   <p>{error}</p>
 {/if}
 
@@ -24,7 +32,8 @@
     <ul>
       {#each getSortedList(playerSummaries) as playerSummary}
         <li
-          class:away={playerSummary.personastate === PersonaState.AWAY || playerSummary.personastate === PersonaState.AWAY_ZZZ}
+          class:away={playerSummary.personastate === PersonaState.AWAY ||
+            playerSummary.personastate === PersonaState.AWAY_ZZZ}
           class:offline={playerSummary.personastate === PersonaState.OFFLINE}
         >
           {playerSummary.personaname} - {getStatus(playerSummary)}
