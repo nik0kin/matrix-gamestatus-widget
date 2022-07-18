@@ -1,11 +1,9 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import { isUserAuthed } from '$lib/auth-cache';
+import { isUserAuthed } from '$lib/auth';
+import { getEnvSettings } from '$lib/env-settings';
 import { getPlayerSummariesFromSteamApi } from './_steam-api';
 import type { RequestHandler } from './__types';
 
-const config = process.env;
+const settings = getEnvSettings();
 
 /** @type {import('./__types').RequestHandler} */
 export const GET: RequestHandler = async ({ locals }) => {
@@ -21,8 +19,8 @@ export const GET: RequestHandler = async ({ locals }) => {
   let playerSummaries: PlayerSummary[];
   try {
     playerSummaries = await getPlayerSummariesFromSteamApi(
-      config.steamWebApiKey,
-      config.steamFriendIdsForStatus.split(',')
+      settings.steamWebApiKey,
+      settings.steamFriendIdsForStatus.split(',')
     );
   } catch (e) {
     return {

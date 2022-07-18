@@ -1,5 +1,6 @@
 import type { RequestHandler } from './__types';
-import { authUser, isUserAuthed } from '$lib/auth-cache';
+import { authUser, isUserAuthed } from '$lib/auth';
+import { getEnvSettings } from '$lib/env-settings';
 import { authWithMatrix } from './_matrix-auth';
 
 export const GET: RequestHandler = async () => {
@@ -16,6 +17,6 @@ export const POST: RequestHandler = async ({ locals, request }) => {
 
   const body = await request.json();
   const mxId = await authWithMatrix(false, body.accessToken, body.matrixServerName);
-  authUser(locals.userid, mxId);
+  authUser(getEnvSettings(), locals.userid, mxId);
   return {};
 };
