@@ -18,4 +18,11 @@ export interface Settings {
    *   TODO more similar options
    */
   allowlistHomeserver?: string;
+
+  //// OPERATIONS ////
+
+  /**
+   * Disables matrix auth and allows access to anyone
+   */
+  debug?: boolean;
 }

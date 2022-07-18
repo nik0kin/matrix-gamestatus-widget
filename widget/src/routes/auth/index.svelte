@@ -10,6 +10,8 @@
   import { getOpenIDConnectToken } from '$lib/matrix-widget-client';
   import type { PostAuthRequest } from './_auth-request-types';
 
+  export let isDebug: boolean;
+
   onMount(async () => {
     // const urlParams = new URLSearchParams(window.location.search);
     // const widgetId = urlParams.get('widgetId');
@@ -19,6 +21,8 @@
     // const mxwidgets = (window as any).mxwidgets();
 
     // const [accessToken, matrixServerName] = await startClient(mxwidgets, widgetId);
+
+    if (isDebug) return goto('/status');
 
     const widgetApi = await (window as any).__getWidgetApi;
     const [accessToken, matrixServerName] = await getOpenIDConnectToken(widgetApi);

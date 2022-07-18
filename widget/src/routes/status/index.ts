@@ -9,7 +9,7 @@ const settings = getEnvSettings();
 export const GET: RequestHandler<{ playerSummaries?: PlayerSummary[]; error?: string }> = async ({
   locals,
 }) => {
-  if (!isUserAuthed(locals.userid)) {
+  if (!settings.debug && !isUserAuthed(locals.userid)) {
     return {
       body: {
         error: 'Unauthed',
