@@ -1,56 +1,36 @@
-# matrix-steam-bot
-# matrix-steamstatus-bot
-# matrix-steamfriendstatus-bot
+# matrix-gamestatus-bot
 
 Keep an eye on your Steam friends from Matrix.
 
 ## Example
 
-```
-Bot: Steam Status:
- - Joy - Solitaire
- - Bobby - Offline
-```
+Imagine steam friendlist but on a simple html page embedded in matrix room widget.
 
 ## Develop
 
 ```
 yarn install
-yarn dev
+yarn dev --open
 ```
 
 ## Run
 
 ### Bootstrap mode
 
+Use node 16+
+
 ```
 # clone repo
 yarn install
 
-cp bot-config.sample.json bot-config.json
-# configure bot-config.json
+yarn build
+
+# create & configure .env
 
 yarn global add pm2
 pm2 start pm2.config.js
 ```
 
-### As a Node.js package
-
-```
-yarn add matrix-steam-bot
-```
-
-```
-import { startBot } from 'matrix-steam-bot';
-
-const config = {
-  // see bot-config.sample.json
-};
-
-startBot(config);
-```
-
 ## Config
 
-See [settings.ts](./src/settings.ts) for config descriptions
-
+TODO

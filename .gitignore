@@ -1,6 +1,10 @@
+.DS_Store
 node_modules
-bot-storage.json
-bot-config.json
-coverage
-dist
-.ideas.txt
+/build
+/.svelte-kit
+/package
+.env
+.env.*
+!.env.example
+.vercel
+.output
