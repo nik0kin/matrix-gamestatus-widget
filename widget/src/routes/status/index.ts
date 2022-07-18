@@ -1,12 +1,14 @@
 import { isUserAuthed } from '$lib/auth';
 import { getEnvSettings } from '$lib/env-settings';
 import { getPlayerSummariesFromSteamApi } from './_steam-api';
+import type { PlayerSummary } from './_steam-api';
 import type { RequestHandler } from './__types';
 
 const settings = getEnvSettings();
 
-/** @type {import('./__types').RequestHandler} */
-export const GET: RequestHandler = async ({ locals }) => {
+export const GET: RequestHandler<{ playerSummaries?: PlayerSummary[]; error?: string }> = async ({
+  locals,
+}) => {
   if (!isUserAuthed(locals.userid)) {
     return {
       body: {
@@ -25,7 +27,7 @@ export const GET: RequestHandler = async ({ locals }) => {
   } catch (e) {
     return {
       body: {
-        error: new Error('Get ISteamUser.GetPlayerSummaries API error: ' + JSON.stringify(e)),
+        error: 'Get ISteamUser.GetPlayerSummaries API error: ' + JSON.stringify(e),
       },
     };
   }
