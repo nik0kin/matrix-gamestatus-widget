@@ -4,3 +4,9 @@ export interface CommonGameStatus {
   away: boolean;
   offline: boolean;
 }
+
+export interface CommonMatchHistory {
+  userKey: string;
+  status: string;
+  date: number; // unix ts
+}

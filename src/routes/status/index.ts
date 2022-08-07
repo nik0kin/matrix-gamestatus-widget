@@ -2,7 +2,7 @@ import { isUserAuthed } from '$lib/auth';
 import type { CommonGameStatus } from '$lib/common-game-status';
 import { getEnvSettings } from '$lib/env-settings';
 import { getSummonerStatus } from '$lib/providers/riot/lol';
-import type { ProcessedLeagueOfLegendsSummonerIds } from '$lib/settings';
+import type { ProcessedLeagueOfLegendsIds } from '$lib/settings';
 import { getPlayerSummariesFromSteamApi, PersonaState } from './_steam-api';
 import type { RequestHandler } from './__types';
 import { getSortedList, getStatus } from './_status-helpers';
@@ -45,30 +45,30 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
     };
   }
 
-  // Riot
+  // LoL, not including TFT - Riot Games
   try {
     const { riotApiKey } = settings;
     if (riotApiKey) {
       const summoners = (settings.leagueOfLegendsSummonerIdsForStatus || '').split(',').map((v) => {
         const p = v.split('|');
-        const s: ProcessedLeagueOfLegendsSummonerIds = {
+        const s: ProcessedLeagueOfLegendsIds = {
           region: p[0],
-          summonerId: p[1],
+          id: p[1],
           key: p[2],
         };
         return s;
       });
-      const promises = summoners.map(async (summoner) => {
-        const status = await getSummonerStatus(riotApiKey, summoner.region, summoner.summonerId);
+      const statusPromises = summoners.map(async (summoner) => {
+        const status = await getSummonerStatus(riotApiKey, summoner.region, summoner.id);
         return {
-          userKey: summoner.key || summoner.summonerId,
+          userKey: summoner.key || summoner.id,
           status,
           away: false,
-          offline: status === 'Offline' || status === 'Unknown',
+          offline: status === 'Unknown',
         };
       });
 
-      playerStatus = playerStatus.concat(await Promise.all(promises));
+      playerStatus = playerStatus.concat(await Promise.all(statusPromises));
     }
   } catch (e) {
     return {

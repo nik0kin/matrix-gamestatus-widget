@@ -8,6 +8,7 @@ const {
   steamFriendIdsForStatus,
   riotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
+  teamFightTacticsPuuidsForMatchHistory,
   allowlistHomeserver,
   debug,
 } = process.env;
@@ -16,6 +17,7 @@ const settings = {
   steamFriendIdsForStatus,
   riotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
+  teamFightTacticsPuuidsForMatchHistory,
   allowlistHomeserver,
   debug: debug === 'true',
 } as Settings;

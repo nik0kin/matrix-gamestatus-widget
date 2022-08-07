@@ -24,6 +24,13 @@ export interface Settings {
 
    */
   leagueOfLegendsSummonerIdsForStatus?: string;
+  /**
+   * Comma seperated list of regions and summoner Id's to query for status message
+   * Eg. "teamFightTacticsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
+   *   Use Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
+
+   */
+  teamFightTacticsPuuidsForMatchHistory?: string;
 
   /**
    * Allow users from this homeserver to access the game status page
@@ -40,8 +47,8 @@ export interface Settings {
   debug?: boolean;
 }
 
-export interface ProcessedLeagueOfLegendsSummonerIds {
+export interface ProcessedLeagueOfLegendsIds {
   region: string;
-  summonerId: string;
+  id: string;
   key?: string;
 }

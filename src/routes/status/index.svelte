@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { goto } from '$app/navigation';
   import type { CommonGameStatus } from '$lib/common-game-status';
 
   export let playerStatus: CommonGameStatus[];
@@ -26,6 +27,8 @@
 {#if !error}
   <div class="steam-status">
     <h1>Steam Status'</h1>
+
+    <button on:click={() => goto('/history')}> TFT Match History </button>
 
     <ul>
       {#each playerStatus as singlePlayerStatus}

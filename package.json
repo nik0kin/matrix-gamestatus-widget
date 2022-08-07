@@ -20,6 +20,7 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "cookie": "^0.4.1",
+    "date-fns": "^2.29.1",
     "dotenv": "^16.0.1"
   },
   "devDependencies": {
