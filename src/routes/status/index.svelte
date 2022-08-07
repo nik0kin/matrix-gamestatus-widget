@@ -1,10 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import type { PlayerSummary } from './_steam-api';
-  import { PersonaState } from './_steam-api';
-  import { getSortedList, getStatus } from './_status-helpers';
+  import type { CommonGameStatus } from '$lib/common-game-status';
 
-  export let playerSummaries: PlayerSummary[];
+  export let playerStatus: CommonGameStatus[];
   export let error: string | undefined;
 
   onMount(() => {
@@ -30,13 +28,9 @@
     <h1>Steam Status'</h1>
 
     <ul>
-      {#each getSortedList(playerSummaries) as playerSummary}
-        <li
-          class:away={playerSummary.personastate === PersonaState.AWAY ||
-            playerSummary.personastate === PersonaState.AWAY_ZZZ}
-          class:offline={playerSummary.personastate === PersonaState.OFFLINE}
-        >
-          {playerSummary.personaname} - {getStatus(playerSummary)}
+      {#each playerStatus as singlePlayerStatus}
+        <li class:away={singlePlayerStatus.away} class:offline={singlePlayerStatus.offline}>
+          {singlePlayerStatus.userKey} - {singlePlayerStatus.status}
         </li>
       {/each}
     </ul>
