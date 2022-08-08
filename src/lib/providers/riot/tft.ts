@@ -95,7 +95,16 @@ export function getMatchHistoryString(puuid: string, match: TFTMatchDto) {
 
   if (!participant) throw new Error('missing participant in match ' + puuid);
 
-  return `${formatDuration(match.info.game_length * 1000)} - Placement: ${participant.placement}`;
+  const highLevelTraits = participant.traits.filter((t) => t.tier_current > 0);
+  const traits = highLevelTraits
+    .map((t) => `${t.name.replace('Set7_', '')}: ${t.num_units}`)
+    .join(', ');
+  const augments = participant.augments
+    .map((a) => a.replace('TFT6_Augment_', '').replace('TFT7_Augment_', ''))
+    .join(', ');
+  return `${formatDuration(match.info.game_length * 1000)} - Placement: ${
+    participant.placement
+  } - ${traits} - ${augments}`;
 }
 
 function getQueueName(gameType: string, queueId: number) {
