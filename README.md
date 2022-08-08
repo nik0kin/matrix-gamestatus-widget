@@ -34,3 +34,7 @@ pm2 start pm2.config.js
 ## Config
 
 TODO
+
+Configured via .env file
+
+See ./src/lib/settings.ts

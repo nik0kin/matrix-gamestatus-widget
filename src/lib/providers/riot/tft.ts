@@ -1,9 +1,11 @@
+import { memoize } from 'lodash';
 import { formatDuration } from '$lib/utils/format-time';
 
 async function getTFTMatchIdsByPuuid(apiKey: string, puuid: string, regionId: string, count = 20) {
   const baseUrl = `https://${regionId}.api.riotgames.com`;
   const url = `${baseUrl}/tft/match/v1/matches/by-puuid/${puuid}/ids?api_key=${apiKey}&count=${count}`;
   const response = await fetch(url);
+  console.log('fetching ' + url);
   return (await response.json()) as string[];
 }
 
@@ -62,8 +64,15 @@ async function getMatchById(apiKey: string, matchId: string, regionId: string) {
   const baseUrl = `https://${regionId}.api.riotgames.com`;
   const url = `${baseUrl}/tft/match/v1/matches/${matchId}?api_key=${apiKey}`;
   const response = await fetch(url);
-  return (await response.json()) as TFTMatchDto;
+  console.log('fetching ' + url);
+  const payload = (await response.json()) as TFTMatchDto;
+  if (!payload.info) throw new Error('Issue with payload: ' + JSON.stringify(payload));
+  return payload;
 }
+const memo_getMatchById = memoize(
+  getMatchById,
+  (apiKey, matchId, regionId) => apiKey + matchId + regionId
+);
 
 export async function getLast10TFTMatches(apiKey: string, puuid: string, regionId: string) {
   const matchIds = await getTFTMatchIdsByPuuid(apiKey, puuid, regionId, 10);
@@ -71,7 +80,7 @@ export async function getLast10TFTMatches(apiKey: string, puuid: string, regionI
 
   // 1 by 1 to ease rate limiting
   for (const id of matchIds) {
-    matches.push(await getMatchById(apiKey, id, regionId));
+    matches.push(await memo_getMatchById(apiKey, id, regionId));
   }
 
   return matches;
