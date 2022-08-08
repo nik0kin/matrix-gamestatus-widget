@@ -7,6 +7,7 @@ export interface CommonGameStatus {
 
 export interface CommonMatchHistory {
   userKey: string;
+  game: string;
   status: string;
   date: number; // unix ts
 }

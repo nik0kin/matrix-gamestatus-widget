@@ -67,9 +67,18 @@ async function getMatchById(apiKey: string, matchId: string, regionId: string) {
 
 export async function getLast10TFTMatches(apiKey: string, puuid: string, regionId: string) {
   const matchIds = await getTFTMatchIdsByPuuid(apiKey, puuid, regionId, 10);
-  const matches = await Promise.all(matchIds.map((id) => getMatchById(apiKey, id, regionId)));
+  const matches: TFTMatchDto[] = [];
+
+  // 1 by 1 to ease rate limiting
+  for (const id of matchIds) {
+    matches.push(await getMatchById(apiKey, id, regionId));
+  }
 
   return matches;
+}
+
+export function getGameString(match: TFTMatchDto) {
+  return getQueueName(match.info.tft_game_type, match.info.queue_id) + ' TFT';
 }
 
 export function getMatchHistoryString(puuid: string, match: TFTMatchDto) {
@@ -77,10 +86,7 @@ export function getMatchHistoryString(puuid: string, match: TFTMatchDto) {
 
   if (!participant) throw new Error('missing participant in match ' + puuid);
 
-  return `${formatDuration(match.info.game_length * 1000)} - ${getQueueName(
-    match.info.tft_game_type,
-    match.info.queue_id
-  )} -  Placement: ${participant.placement}`;
+  return `${formatDuration(match.info.game_length * 1000)} - Placement: ${participant.placement}`;
 }
 
 function getQueueName(gameType: string, queueId: number) {

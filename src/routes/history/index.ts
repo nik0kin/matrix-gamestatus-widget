@@ -1,8 +1,9 @@
 import { isUserAuthed } from '$lib/auth';
 import type { CommonMatchHistory } from '$lib/common-game-status';
 import { getEnvSettings } from '$lib/env-settings';
-import { getLast10TFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
+import { getGameString, getLast10TFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
 import type { ProcessedLeagueOfLegendsIds } from '$lib/settings';
+import { wait } from '$lib/utils/async-wait';
 import type { RequestHandler } from './__types';
 
 const settings = getEnvSettings();
@@ -38,16 +39,25 @@ export const GET: RequestHandler<{
           };
           const puuid = player.id;
 
-          // get last 10 matches, and convert it to a common match history object
-          return (await getLast10TFTMatches(riotApiKey, puuid, 'americas')).map((m) => ({
-            userKey: 'Niko-TFT',
+          // get last 10 matches
+          const last10Matches = await getLast10TFTMatches(riotApiKey, puuid, 'americas');
+
+          // cant do more than 20 per second
+          await wait(1 * 1000);
+
+          // convert it to a common match history object
+          return last10Matches.map((m) => ({
+            userKey: player.key || player.id,
             date: m.info.game_datetime,
+            game: getGameString(m),
             status: getMatchHistoryString(puuid, m),
           }));
         });
 
       // TODO could a flatmap somewhere make this cleaner?
-      matchHistories = matchHistories.concat((await Promise.all(matchesPromises)).flat());
+      matchHistories = matchHistories.concat(
+        (await Promise.all(matchesPromises)).flat().sort((a, b) => b.date - a.date)
+      );
     }
   } catch (e) {
     return {

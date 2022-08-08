@@ -33,10 +33,19 @@
     <ul>
       {#each matchHistories as match}
         <li>
-          {match.userKey} - {new Date(match.date).toLocaleString()} - <small>{match.status}</small>
+          {match.game} -
+          {match.userKey} - <small>{new Date(match.date).toLocaleString()}</small> -
+          <small>{match.status}</small>
         </li>
       {/each}
     </ul>
+    <br /><br />
+    <p>
+      matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
+      opinions of Riot Games or anyone officially involved in producing or managing Riot Games
+      properties. Riot Games, and all associated properties are trademarks or registered trademarks
+      of Riot Games, Inc.
+    </p>
   </div>
 {/if}
 
