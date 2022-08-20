@@ -28,7 +28,7 @@
   <div class="steam-status">
     <h1>Steam Status'</h1>
 
-    <button on:click={() => goto('/history')}> TFT Match History </button>
+    <button on:click={() => goto('/history')}> Match History </button>
 
     <ul>
       {#each playerStatus as singlePlayerStatus}

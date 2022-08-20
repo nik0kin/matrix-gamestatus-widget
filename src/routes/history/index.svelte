@@ -4,6 +4,7 @@
   import type { CommonMatchHistory } from '$lib/common-game-status';
 
   export let matchHistories: CommonMatchHistory[];
+  export let apisUsed: string[];
   export let error: string | undefined;
 
   onMount(() => {
@@ -50,12 +51,14 @@
       {/each}
     </ul>
     <br /><br />
-    <p>
-      matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
-      opinions of Riot Games or anyone officially involved in producing or managing Riot Games
-      properties. Riot Games, and all associated properties are trademarks or registered trademarks
-      of Riot Games, Inc.
-    </p>
+    {#if apisUsed.includes('riotgames')}
+      <p>
+        matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
+        opinions of Riot Games or anyone officially involved in producing or managing Riot Games
+        properties. Riot Games, and all associated properties are trademarks or registered
+        trademarks of Riot Games, Inc.
+      </p>
+    {/if}
   </div>
 {/if}
 

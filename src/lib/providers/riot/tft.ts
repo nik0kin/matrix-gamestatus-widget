@@ -1,4 +1,5 @@
-import { memoize } from 'lodash';
+import pkg from 'lodash';
+const { memoize } = pkg;
 import { formatDuration } from '$lib/utils/format-time';
 
 async function getTFTMatchIdsByPuuid(apiKey: string, puuid: string, regionId: string, count = 20) {

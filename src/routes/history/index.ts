@@ -28,6 +28,7 @@ export const GET: RequestHandler<{
   console.log(`${locals.userid} authorized to view history`);
 
   let matchHistories: CommonMatchHistory[] = [];
+  const apisUsed: string[] = [];
 
   // TFT - Riot Games
   try {
@@ -35,7 +36,10 @@ export const GET: RequestHandler<{
     if (riotApiKey) {
       const matches = await getTFTMatches(riotApiKey);
 
-      matchHistories = matchHistories.concat(matches);
+      if (matches.length) {
+        matchHistories = matchHistories.concat(matches);
+        apisUsed.push('riotgames');
+      }
     }
   } catch (e) {
     return {
@@ -52,7 +56,10 @@ export const GET: RequestHandler<{
     if (pubgApiKey) {
       const matches = await getPubgMatches(pubgApiKey);
 
-      matchHistories = matchHistories.concat(matches);
+      if (matches.length) {
+        matchHistories = matchHistories.concat(matches);
+        apisUsed.push('pubg');
+      }
     }
   } catch (e) {
     return {
@@ -65,6 +72,7 @@ export const GET: RequestHandler<{
   return {
     body: {
       matchHistories: matchHistories.sort((a, b) => b.date - a.date),
+      apisUsed,
     },
   };
 };
