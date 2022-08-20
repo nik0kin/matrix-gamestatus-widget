@@ -34,7 +34,17 @@
       {#each matchHistories as match}
         <li>
           {match.game} -
-          {match.userKey} - <small>{new Date(match.date).toLocaleString()}</small> -
+          {match.userKey} -
+          <small
+            >{new Date(match.date).toLocaleString([], {
+              year: '2-digit',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: '2-digit',
+            })}</small
+          >
+          -
           <small>{match.status}</small>
         </li>
       {/each}
@@ -54,6 +64,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  button {
+    margin-bottom: 0.67em;
   }
 
   ul {

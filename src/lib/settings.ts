@@ -20,17 +20,27 @@ export interface Settings {
   /**
    * Comma seperated list of regions and summoner Id's to query for status message
    * Eg. "leagueOfLegendsSummonerIdsForStatus=na1|summonerId123|BOB,na1|summonerId456|KING"
-   *   Use Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get summonerId
-
+   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get summonerId
    */
   leagueOfLegendsSummonerIdsForStatus?: string;
   /**
-   * Comma seperated list of regions and summoner Id's to query for status message
+   * Comma seperated list of regions and summoner Id's to query for match history
    * Eg. "teamFightTacticsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
-   *   Use Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
-
+   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
    */
   teamFightTacticsPuuidsForMatchHistory?: string;
+
+  /**
+   * Pubg api key
+   *   Generate at https://documentation.pubg.com/
+   */
+  pubgApiKey?: string;
+  /**
+   * Comma seperated list of platforms and (playerIds or playerNames) to query for match history
+   * Eg. "pubgIdsForMatchHistory=steam|MyFriendsUsername,steam|account.zxydatabaseidcba"
+   *   Use https://documentation.pubg.com/en/players-endpoint.html#/Players/get_players w/ filter[playerNames] to find account id
+   */
+  pubgPlayersForMatchHistory?: string;
 
   /**
    * Allow users from this homeserver to access the game status page
@@ -51,4 +61,9 @@ export interface ProcessedLeagueOfLegendsIds {
   region: string;
   id: string;
   key?: string;
+}
+
+export interface ProcessedPubgIds {
+  platform: string;
+  idOrPlayerName: string;
 }

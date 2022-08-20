@@ -3,7 +3,12 @@ import { isUserAuthed } from '$lib/auth';
 import type { CommonMatchHistory } from '$lib/common-game-status';
 import { getEnvSettings } from '$lib/env-settings';
 import { getGameString, getLast10TFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
-import type { ProcessedLeagueOfLegendsIds } from '$lib/settings';
+import {
+  getGameString as getPubgGameString,
+  getRecentPubgMatches,
+  getMatchHistoryString as getPubgMatchHistoryString,
+} from '$lib/providers/pubg';
+import type { ProcessedLeagueOfLegendsIds, ProcessedPubgIds } from '$lib/settings';
 import { wait } from '$lib/utils/async-wait';
 import type { RequestHandler } from './__types';
 
@@ -41,9 +46,25 @@ export const GET: RequestHandler<{
     };
   }
 
+  // PUBG - Krafton
+  try {
+    const { pubgApiKey } = settings;
+    if (pubgApiKey) {
+      const matches = await getPubgMatches(pubgApiKey);
+
+      matchHistories = matchHistories.concat(matches);
+    }
+  } catch (e) {
+    return {
+      body: {
+        error: 'PUBG getPubgMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
+      },
+    };
+  }
+
   return {
     body: {
-      matchHistories,
+      matchHistories: matchHistories.sort((a, b) => b.date - a.date),
     },
   };
 };
@@ -81,7 +102,47 @@ async function _getTFTMatches(riotApiKey: string) {
     await wait(1 * 1000);
   }
 
-  return matches.sort((a, b) => b.date - a.date);
+  return matches;
 }
-// const getTFTMatches = asyncThrottle(_getTFTMatches, 5 * 60 * 1000);
 const getTFTMatches = asyncThrottleCache(_getTFTMatches, 5 * 60 * 1000);
+
+async function _getPubgMatches(pubgApiKey: string) {
+  const pubgPlayers = (settings.pubgPlayersForMatchHistory || '')
+    .split(',')
+    .map((v): ProcessedPubgIds => {
+      const p = v.split('|');
+      return {
+        platform: p[0],
+        idOrPlayerName: p[1],
+      };
+    });
+  const isPlayerId = (x: string) => x.match('account.');
+  const pubgPlayersWithNames = pubgPlayers
+    .filter((p) => !isPlayerId(p.idOrPlayerName))
+    .map((m) => m.idOrPlayerName);
+  const pubgPlayersWithIds = pubgPlayers
+    .filter((p) => isPlayerId(p.idOrPlayerName))
+    .map((m) => m.idOrPlayerName);
+  const playerNameMatches = await getRecentPubgMatches(
+    pubgApiKey,
+    'playerNames',
+    pubgPlayersWithNames,
+    'steam'
+  );
+  const playerIdMatches = await getRecentPubgMatches(
+    pubgApiKey,
+    'playerIds',
+    pubgPlayersWithIds,
+    'steam'
+  );
+  return [...playerNameMatches, ...playerIdMatches].map(
+    ([pId, pName, m]): CommonMatchHistory => ({
+      userKey: pName,
+      date: new Date(m.data.attributes.createdAt).getTime(),
+      game: getPubgGameString(m),
+      status: getPubgMatchHistoryString(pId, m),
+    })
+  );
+}
+
+const getPubgMatches = asyncThrottleCache(_getPubgMatches, 5 * 60 * 1000);

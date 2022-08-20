@@ -9,6 +9,8 @@ const {
   riotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
   teamFightTacticsPuuidsForMatchHistory,
+  pubgApiKey,
+  pubgPlayersForMatchHistory,
   allowlistHomeserver,
   debug,
 } = process.env;
@@ -18,6 +20,8 @@ const settings = {
   riotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
   teamFightTacticsPuuidsForMatchHistory,
+  pubgApiKey,
+  pubgPlayersForMatchHistory,
   allowlistHomeserver,
   debug: debug === 'true',
 } as Settings;
