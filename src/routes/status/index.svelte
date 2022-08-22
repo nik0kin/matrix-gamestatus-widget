@@ -27,10 +27,11 @@
 {/if}
 
 {#if !error}
-  <div class="steam-status">
+  <div class="prose steam-status">
     <h1>Steam Status'</h1>
 
     <button
+      class="btn btn-secondary btn-wide"
       disabled={loadingNewPage}
       on:click={() => {
         loadingNewPage = true;

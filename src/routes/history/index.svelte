@@ -26,10 +26,10 @@
 {/if}
 
 {#if !error}
-  <div class="main-div">
+  <div class="prose main-div">
     <h1>Match History</h1>
 
-    <button on:click={() => goto('/status')}> Back </button>
+    <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
 
     <ul>
       {#each matchHistories as match}
@@ -50,7 +50,9 @@
         </li>
       {/each}
     </ul>
-    <br /><br />
+    <br />
+    <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
+    <br />
     {#if apisUsed.includes('riotgames')}
       <p>
         matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
@@ -67,10 +69,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  button {
-    margin-bottom: 0.67em;
   }
 
   ul {
