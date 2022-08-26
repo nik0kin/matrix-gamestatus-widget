@@ -34,6 +34,7 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
         (p): CommonGameStatus => ({
           userKey: p.personaname,
           status: getStatus(p),
+          avatarUrl: p.avatarfull,
           away: p.personastate === PersonaState.AWAY || p.personastate === PersonaState.AWAY_ZZZ,
           offline: p.personastate === PersonaState.OFFLINE,
         })

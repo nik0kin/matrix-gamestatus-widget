@@ -1,5 +1,6 @@
 export interface CommonGameStatus {
   userKey: string;
+  avatarUrl?: string;
   status: string;
   away: boolean;
   offline: boolean;

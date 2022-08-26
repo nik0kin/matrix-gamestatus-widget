@@ -31,27 +31,51 @@
     <h1>Steam Status'</h1>
 
     <button
-      class="btn btn-secondary btn-wide"
+      class="btn btn-wide mb-6"
+      class:loading={loadingNewPage}
       disabled={loadingNewPage}
       on:click={() => {
         loadingNewPage = true;
         goto('/history');
       }}
     >
-      {#if !loadingNewPage}
-        Match History
-      {:else}
-        Loading
-      {/if}
+      Match History
     </button>
 
-    <ul>
+    <div>
       {#each playerStatus as singlePlayerStatus}
-        <li class:away={singlePlayerStatus.away} class:offline={singlePlayerStatus.offline}>
-          {singlePlayerStatus.userKey} - {singlePlayerStatus.status}
-        </li>
+        <div
+          class="card w-96 max-w-full bg-base-100 shadow-xl mb-4"
+          style="max-width: 100vw"
+          class:opacity-50={singlePlayerStatus.away}
+          class:opacity-20={singlePlayerStatus.offline}
+        >
+          <div class="p-2">
+            <div class="flex items-center space-x-2">
+              <div
+                class="avatar not-prose"
+                class:online={!singlePlayerStatus.away && !singlePlayerStatus.offline}
+                class:offline={singlePlayerStatus.away || singlePlayerStatus.offline}
+              >
+                <div class="mask mask-squircle bg-base-content h-16 w-16 bg-opacity-10 p-px">
+                  {#if singlePlayerStatus.avatarUrl}
+                    <img
+                      src={singlePlayerStatus.avatarUrl}
+                      alt="{singlePlayerStatus.userKey} Steam Avatar"
+                      class="mask mask-squircle"
+                    />
+                  {/if}
+                </div>
+              </div>
+              <div>
+                <div class="text-lg font-extrabold">{singlePlayerStatus.userKey}</div>
+                <div class="text-base-content/70 text-sm">{singlePlayerStatus.status}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       {/each}
-    </ul>
+    </div>
   </div>
 {/if}
 
@@ -60,21 +84,5 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  ul {
-    list-style: none;
-  }
-
-  li {
-    margin-bottom: 8px;
-  }
-
-  li.away {
-    opacity: 50%;
-  }
-
-  li.offline {
-    opacity: 20%;
   }
 </style>
