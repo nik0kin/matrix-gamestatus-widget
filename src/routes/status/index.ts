@@ -52,7 +52,11 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
   try {
     const { riotApiKey } = settings;
     if (riotApiKey) {
-      const summoners = (settings.leagueOfLegendsSummonerIdsForStatus || '').split(',').map((v) => {
+      const summoners = (
+        settings.leagueOfLegendsSummonerIdsForStatus
+          ? settings.leagueOfLegendsSummonerIdsForStatus.split(',')
+          : []
+      ).map((v) => {
         const p = v.split('|');
         const s: ProcessedLeagueOfLegendsIds = {
           region: p[0],
@@ -62,7 +66,7 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
         return s;
       });
       const statusPromises = summoners.map(async (summoner): Promise<CommonGameStatus> => {
-        const status = await getSummonerStatus(riotApiKey, summoner.region, summoner.id);
+        const status = await getSummonerStatus(riotApiKey, summoner.id, summoner.region);
         return {
           userKey: summoner.key || summoner.id,
           status,

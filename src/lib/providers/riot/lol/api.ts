@@ -41,9 +41,16 @@ export async function getCurrentGameInfoBySummoner(
   regionId: string
 ) {
   const baseUrl = `https://${regionId}.api.riotgames.com`;
-  const url = `${baseUrl}/lol/spectator/v4/active-games/by-summoner/${encryptedSummonerId}?key=${apiKey}`;
+  const url = `${baseUrl}/lol/spectator/v4/active-games/by-summoner/${encryptedSummonerId}?api_key=${apiKey}`;
   const response = await fetch(url);
-  return (await response.json()) as CurrentGameInfo;
+  console.log('fetching ' + url);
+  const responseJson = await response.json();
+
+  if (!responseJson.gameId) {
+    throw new Error(responseJson.status);
+  }
+
+  return responseJson as CurrentGameInfo;
 }
 
 export async function getLoLMatchIdsByPuuid(

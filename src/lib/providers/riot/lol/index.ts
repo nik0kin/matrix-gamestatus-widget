@@ -19,7 +19,7 @@ export async function getSummonerStatus(
       encryptedSummonerId,
       regionId
     );
-    return currentGameInfo.gameMode + ' ' + currentGameInfo.gameType;
+    return `${currentGameInfo.gameMode}`;
   } catch (e) {
     return 'Unknown';
   }

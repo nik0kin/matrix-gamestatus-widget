@@ -7,7 +7,7 @@ export interface Settings {
    */
   steamWebApiKey: string;
   /**
-   * Comma seperated list of steam user Id's to query for status message
+   * Comma separated list of steam user id's to query for status message
    *   Use https://steamapi.xpaw.me/#ISteamUser/ResolveVanityURL to get an Id from the vanity url
    */
   steamFriendIdsForStatus: string;
@@ -15,22 +15,23 @@ export interface Settings {
   /**
    * Riot api key
    *   Generate at https://developer.riotgames.com/
+   *   Note that id/puuid's used down below are encrypted and tied to the key, so if you use a new key, you'll have to get a new set of id/puuids's
    */
   riotApiKey?: string;
   /**
-   * Comma seperated list of regions and summoner Id's to query for status message
+   * Comma separated list of regions and summoner id's to query for status message
    * Eg. "leagueOfLegendsSummonerIdsForStatus=na1|summonerId123|BOB,na1|summonerId456|KING"
    *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get summonerId (id)
    */
   leagueOfLegendsSummonerIdsForStatus?: string;
   /**
-   * Comma seperated list of regions and summoner Id's to query for match history
+   * Comma separated list of regions and summoner id's to query for match history
    * Eg. "leagueOfLegendsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
    *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
    */
   leagueOfLegendsPuuidsForMatchHistory?: string;
   /**
-   * Comma seperated list of regions and summoner Id's to query for match history
+   * Comma separated list of regions and summoner id's to query for match history
    * Eg. "teamFightTacticsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
    *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
    */
@@ -42,7 +43,7 @@ export interface Settings {
    */
   pubgApiKey?: string;
   /**
-   * Comma seperated list of platforms and (playerIds or playerNames) to query for match history
+   * Comma separated list of platforms and (playerIds or playerNames) to query for match history
    * Eg. "pubgIdsForMatchHistory=steam|MyFriendsUsername,steam|account.zxydatabaseidcba"
    *   Use https://documentation.pubg.com/en/players-endpoint.html#/Players/get_players w/ filter[playerNames] to find account id
    */
