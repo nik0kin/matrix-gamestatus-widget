@@ -31,7 +31,7 @@
     <h1>Steam Status'</h1>
 
     <button
-      class="btn btn-wide mb-6"
+      class="btn btn-wide mb-8"
       class:loading={loadingNewPage}
       disabled={loadingNewPage}
       on:click={() => {
@@ -45,7 +45,7 @@
     <div>
       {#each playerStatus as singlePlayerStatus}
         <div
-          class="card w-96 max-w-full bg-base-100 shadow-xl mb-4"
+          class="card w-96 bg-base-100 shadow-xl mb-4"
           style="max-width: 100vw"
           class:opacity-50={singlePlayerStatus.away}
           class:opacity-20={singlePlayerStatus.offline}

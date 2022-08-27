@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import type { CommonMatchHistory } from '$lib/common-game-status';
+  import { formatDuration } from '$lib/utils/format-time';
 
   export let matchHistories: CommonMatchHistory[];
   export let apisUsed: string[];
@@ -29,27 +30,29 @@
   <div class="prose main-div">
     <h1>Match History</h1>
 
-    <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
+    <button class="btn btn-wide mb-8" on:click={() => goto('/status')}> Back </button>
 
-    <ul>
-      {#each matchHistories as match}
-        <li>
-          {match.game} -
-          {match.userKey} -
-          <small
-            >{new Date(match.date).toLocaleString([], {
-              year: '2-digit',
-              month: 'numeric',
-              day: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-            })}</small
-          >
-          -
-          <small>{match.status}</small>
-        </li>
-      {/each}
-    </ul>
+    {#each matchHistories as match}
+      <div class="card w-96 bg-base-100 shadow-xl mb-4" style="max-width: 100vw">
+        <div class="p-2">
+          <div class="flex items-center space-x-2">
+            <div>
+              <div class="text-lg font-extrabold">{match.userKey} - {match.game}</div>
+              <div class="text-base-content/70 text-xs mb-1">
+                {new Date(match.date).toLocaleString([], {
+                  year: '2-digit',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: '2-digit',
+                })} - {formatDuration(match.length)}
+              </div>
+              <div class="text-base-content/70 text-sm">{match.status}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {/each}
     <br />
     <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
     <br />
@@ -69,13 +72,5 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-  }
-
-  ul {
-    list-style: none;
-  }
-
-  li {
-    margin-bottom: 16px;
   }
 </style>

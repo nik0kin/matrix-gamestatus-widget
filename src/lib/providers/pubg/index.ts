@@ -1,5 +1,4 @@
 import { formatNumber } from '$lib/utils/format-number';
-import { formatDuration } from '$lib/utils/format-time';
 import { getMapName, getMatchById, getPlayersByPlayerNames, type GetMatchResponse } from './api';
 
 // TODO rate limiting if tracking 10+ players
@@ -56,7 +55,5 @@ export function getMatchHistoryString(playerId: string, match: GetMatchResponse)
   } - ${participant.attributes.stats.kills} kills - ${formatNumber(
     participant.attributes.stats.damageDealt,
     1
-  )} damage - ${formatNumber(distanceTraveled / 1000, 2)} km - ${formatDuration(
-    match.data.attributes.duration * 1000
-  )}`;
+  )} damage - ${formatNumber(distanceTraveled / 1000, 2)} km`;
 }

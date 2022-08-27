@@ -1,6 +1,5 @@
 import pkg from 'lodash';
 const { memoize } = pkg;
-import { formatDuration } from '$lib/utils/format-time';
 
 async function getTFTMatchIdsByPuuid(apiKey: string, puuid: string, regionId: string, count = 20) {
   const baseUrl = `https://${regionId}.api.riotgames.com`;
@@ -103,9 +102,7 @@ export function getMatchHistoryString(puuid: string, match: TFTMatchDto) {
   const augments = participant.augments
     .map((a) => a.replace('TFT6_Augment_', '').replace('TFT7_Augment_', ''))
     .join(', ');
-  return `${formatDuration(match.info.game_length * 1000)} - Placement: ${
-    participant.placement
-  } - ${traits} - ${augments}`;
+  return `Placement: ${participant.placement} - ${traits} - ${augments}`;
 }
 
 function getQueueName(gameType: string, queueId: number) {
