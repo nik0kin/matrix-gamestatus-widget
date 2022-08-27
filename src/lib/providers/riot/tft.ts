@@ -74,8 +74,13 @@ const memo_getMatchById = memoize(
   (apiKey, matchId, regionId) => apiKey + matchId + regionId
 );
 
-export async function getLast10TFTMatches(apiKey: string, puuid: string, regionId: string) {
-  const matchIds = await getTFTMatchIdsByPuuid(apiKey, puuid, regionId, 10);
+export async function getLastTFTMatches(
+  apiKey: string,
+  puuid: string,
+  regionId: string,
+  count: number
+) {
+  const matchIds = await getTFTMatchIdsByPuuid(apiKey, puuid, regionId, count);
   const matches: TFTMatchDto[] = [];
 
   // 1 by 1 to ease rate limiting

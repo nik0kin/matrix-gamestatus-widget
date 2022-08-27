@@ -2,7 +2,7 @@ import asyncThrottleCache from 'async-throttle-cache';
 import { isUserAuthed } from '$lib/auth';
 import type { CommonMatchHistory } from '$lib/common-game-status';
 import { getEnvSettings } from '$lib/env-settings';
-import { getGameString, getLast10TFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
+import { getGameString, getLastTFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
 import {
   getGameString as getPubgGameString,
   getRecentPubgMatches,
@@ -78,32 +78,31 @@ export const GET: RequestHandler<{
 };
 
 async function _getTFTMatches(riotApiKey: string) {
-  const matchesPromises = (settings.teamFightTacticsPuuidsForMatchHistory || '')
-    .split(',')
-    // Per player
-    .map(async (v) => {
-      const p = v.split('|');
-      const player: ProcessedLeagueOfLegendsIds = {
-        region: p[0],
-        id: p[1],
-        key: p[2],
-      };
-      const puuid = player.id;
+  const players = (settings.teamFightTacticsPuuidsForMatchHistory || '').split(',');
+  const matchesPromises = players.map(async (v) => {
+    const p = v.split('|');
+    const player: ProcessedLeagueOfLegendsIds = {
+      region: p[0],
+      id: p[1],
+      key: p[2],
+    };
+    const puuid = player.id;
 
-      // get last 10 matches
-      const last10Matches = await getLast10TFTMatches(riotApiKey, puuid, 'americas');
+    // get last x matches
+    const count = (20 - players.length) / players.length; // allow 1 api call to look up matches, then rest go to lookup matches
+    const last10Matches = await getLastTFTMatches(riotApiKey, puuid, 'americas', count);
 
-      // convert it to a common match history object
-      return last10Matches.map(
-        (m): CommonMatchHistory => ({
-          userKey: player.key || player.id,
-          date: m.info.game_datetime,
-          length: m.info.game_length * 1000,
-          game: getGameString(m),
-          status: getMatchHistoryString(puuid, m),
-        })
-      );
-    });
+    // convert it to a common match history object
+    return last10Matches.map(
+      (m): CommonMatchHistory => ({
+        userKey: player.key || player.id,
+        date: m.info.game_datetime,
+        length: m.info.game_length * 1000,
+        game: getGameString(m),
+        status: getMatchHistoryString(puuid, m),
+      })
+    );
+  });
 
   const matches: CommonMatchHistory[] = [];
   for (const promise of matchesPromises) {

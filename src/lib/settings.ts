@@ -20,7 +20,7 @@ export interface Settings {
   /**
    * Comma seperated list of regions and summoner Id's to query for status message
    * Eg. "leagueOfLegendsSummonerIdsForStatus=na1|summonerId123|BOB,na1|summonerId456|KING"
-   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get summonerId
+   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get summonerId (id)
    */
   leagueOfLegendsSummonerIdsForStatus?: string;
   /**
