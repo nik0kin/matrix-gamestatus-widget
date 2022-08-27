@@ -42,7 +42,7 @@ export interface GetMatchResponse {
     attributes: {
       createdAt: string;
       duration: number; // seconds
-      matchType: 'airoyale'; // ???
+      matchType: 'official' | 'airoyale'; // ???
       gameMode: 'duo'; // enum?
       mapName: string;
       isCustomMatch: true;
@@ -159,4 +159,23 @@ export async function getMatchById(matchId: string, platform: string) {
 
   matchesCache[matchId] = payload;
   return payload;
+}
+
+// From https://github.com/pubg/api-assets/blob/master/dictionaries/telemetry/mapName.json
+const mapNameMapping: Record<string, string> = {
+  Baltic_Main: 'Erangel',
+  Chimera_Main: 'Paramo',
+  Desert_Main: 'Miramar',
+  DihorOtok_Main: 'Vikendi',
+  Erangel_Main: 'Erangel',
+  Heaven_Main: 'Haven',
+  Kiki_Main: 'Deston',
+  Range_Main: 'Camp Jackal',
+  Savage_Main: 'Sanhok',
+  Summerland_Main: 'Karakin',
+  Tiger_Main: 'Taego',
+};
+
+export function getMapName(apiMapName: string) {
+  return mapNameMapping[apiMapName] || apiMapName;
 }

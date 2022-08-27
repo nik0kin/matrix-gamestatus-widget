@@ -1,6 +1,6 @@
 import { formatNumber } from '$lib/utils/format-number';
 import { formatDuration } from '$lib/utils/format-time';
-import { getMatchById, getPlayersByPlayerNames, type GetMatchResponse } from './api';
+import { getMapName, getMatchById, getPlayersByPlayerNames, type GetMatchResponse } from './api';
 
 // TODO rate limiting if tracking 10+ players
 
@@ -35,7 +35,9 @@ export async function getRecentPubgMatches(
 }
 
 export function getGameString(match: GetMatchResponse) {
-  return `PUBG - ${match.data.attributes.mapName} ${match.data.attributes.matchType}`;
+  const matchType =
+    match.data.attributes.matchType !== 'official' ? match.data.attributes.matchType : '';
+  return `PUBG - ${getMapName(match.data.attributes.mapName)} ${matchType}`;
 }
 
 export function getMatchHistoryString(playerId: string, match: GetMatchResponse) {
