@@ -25,6 +25,12 @@ export interface Settings {
   leagueOfLegendsSummonerIdsForStatus?: string;
   /**
    * Comma seperated list of regions and summoner Id's to query for match history
+   * Eg. "leagueOfLegendsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
+   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
+   */
+  leagueOfLegendsPuuidsForMatchHistory?: string;
+  /**
+   * Comma seperated list of regions and summoner Id's to query for match history
    * Eg. "teamFightTacticsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
    *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
    */

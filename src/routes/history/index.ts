@@ -2,6 +2,11 @@ import asyncThrottleCache from 'async-throttle-cache';
 import { isUserAuthed } from '$lib/auth';
 import type { CommonMatchHistory } from '$lib/common-game-status';
 import { getEnvSettings } from '$lib/env-settings';
+import {
+  getGameString as getLoLGameString,
+  getLastLoLMatches,
+  getMatchHistoryString as getLoLMatchHistoryString,
+} from '$lib/providers/riot/lol';
 import { getGameString, getLastTFTMatches, getMatchHistoryString } from '$lib/providers/riot/tft';
 import {
   getGameString as getPubgGameString,
@@ -30,9 +35,28 @@ export const GET: RequestHandler<{
   let matchHistories: CommonMatchHistory[] = [];
   const apisUsed: string[] = [];
 
+  const { riotApiKey, pubgApiKey } = settings;
+
+  // Lol - Riot Games
+  try {
+    if (riotApiKey) {
+      const matches = await getLoLMatches(riotApiKey);
+
+      if (matches.length) {
+        matchHistories = matchHistories.concat(matches);
+        apisUsed.push('riotgames');
+      }
+    }
+  } catch (e) {
+    return {
+      body: {
+        error: 'LoL getLastLoLMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
+      },
+    };
+  }
+
   // TFT - Riot Games
   try {
-    const { riotApiKey } = settings;
     if (riotApiKey) {
       const matches = await getTFTMatches(riotApiKey);
 
@@ -44,15 +68,13 @@ export const GET: RequestHandler<{
   } catch (e) {
     return {
       body: {
-        error:
-          'TFT getLast10TFTMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
+        error: 'TFT getLastTFTMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
       },
     };
   }
 
   // PUBG - Krafton
   try {
-    const { pubgApiKey } = settings;
     if (pubgApiKey) {
       const matches = await getPubgMatches(pubgApiKey);
 
@@ -77,6 +99,45 @@ export const GET: RequestHandler<{
   };
 };
 
+async function _getLoLMatches(riotApiKey: string) {
+  const players = (settings.leagueOfLegendsPuuidsForMatchHistory || '').split(',');
+  const matchesPromises = players.map(async (v) => {
+    const p = v.split('|');
+    const player: ProcessedLeagueOfLegendsIds = {
+      region: p[0],
+      id: p[1],
+      key: p[2],
+    };
+    const puuid = player.id;
+
+    // get last x matches
+    const count = (20 - players.length) / players.length; // allow 1 api call to look up matches, then rest go to lookup matches
+    const lastMatches = await getLastLoLMatches(riotApiKey, puuid, 'americas', count);
+
+    // convert it to a common match history object
+    return lastMatches.map(
+      (m): CommonMatchHistory => ({
+        userKey: player.key || player.id,
+        date: m.info.gameCreation,
+        length: m.info.gameDuration * 1000,
+        game: getLoLGameString(m),
+        status: getLoLMatchHistoryString(puuid, m),
+      })
+    );
+  });
+
+  const matches: CommonMatchHistory[] = [];
+  for (const promise of matchesPromises) {
+    matches.push(...(await promise));
+
+    // buffer a little bit
+    await wait(100);
+  }
+
+  return matches;
+}
+const getLoLMatches = asyncThrottleCache(_getLoLMatches, 5 * 60 * 1000) as typeof _getLoLMatches;
+
 async function _getTFTMatches(riotApiKey: string) {
   const players = (settings.teamFightTacticsPuuidsForMatchHistory || '').split(',');
   const matchesPromises = players.map(async (v) => {
@@ -90,10 +151,10 @@ async function _getTFTMatches(riotApiKey: string) {
 
     // get last x matches
     const count = (20 - players.length) / players.length; // allow 1 api call to look up matches, then rest go to lookup matches
-    const last10Matches = await getLastTFTMatches(riotApiKey, puuid, 'americas', count);
+    const lastMatches = await getLastTFTMatches(riotApiKey, puuid, 'americas', count);
 
     // convert it to a common match history object
-    return last10Matches.map(
+    return lastMatches.map(
       (m): CommonMatchHistory => ({
         userKey: player.key || player.id,
         date: m.info.game_datetime,
