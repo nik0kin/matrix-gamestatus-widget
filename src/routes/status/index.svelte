@@ -6,6 +6,8 @@
   export let playerStatus: CommonGameStatus[];
   export let error: string | undefined;
 
+  let loadingNewPage: boolean = false;
+
   onMount(() => {
     // Refresh the page every 60 seconds
     setTimeout(() => {
@@ -28,7 +30,19 @@
   <div class="steam-status">
     <h1>Steam Status'</h1>
 
-    <button on:click={() => goto('/history')}> Match History </button>
+    <button
+      disabled={loadingNewPage}
+      on:click={() => {
+        loadingNewPage = true;
+        goto('/history');
+      }}
+    >
+      {#if !loadingNewPage}
+        Match History
+      {:else}
+        Loading
+      {/if}
+    </button>
 
     <ul>
       {#each playerStatus as singlePlayerStatus}
