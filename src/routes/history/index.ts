@@ -94,12 +94,15 @@ async function _getTFTMatches(riotApiKey: string) {
       const last10Matches = await getLast10TFTMatches(riotApiKey, puuid, 'americas');
 
       // convert it to a common match history object
-      return last10Matches.map((m) => ({
-        userKey: player.key || player.id,
-        date: m.info.game_datetime,
-        game: getGameString(m),
-        status: getMatchHistoryString(puuid, m),
-      }));
+      return last10Matches.map(
+        (m): CommonMatchHistory => ({
+          userKey: player.key || player.id,
+          date: m.info.game_datetime,
+          length: m.info.game_length * 1000,
+          game: getGameString(m),
+          status: getMatchHistoryString(puuid, m),
+        })
+      );
     });
 
   const matches: CommonMatchHistory[] = [];
@@ -147,6 +150,7 @@ async function _getPubgMatches(pubgApiKey: string) {
     ([pId, pName, m]): CommonMatchHistory => ({
       userKey: pName,
       date: new Date(m.data.attributes.createdAt).getTime(),
+      length: m.data.attributes.duration * 1000,
       game: getPubgGameString(m),
       status: getPubgMatchHistoryString(pId, m),
     })

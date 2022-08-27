@@ -10,4 +10,5 @@ export interface CommonMatchHistory {
   game: string;
   status: string;
   date: number; // unix ts
+  length: number; // in ms
 }

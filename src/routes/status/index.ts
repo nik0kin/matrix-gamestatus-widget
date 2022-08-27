@@ -30,12 +30,14 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
       settings.steamFriendIdsForStatus.split(',')
     );
     playerStatus = playerStatus.concat(
-      getSortedList(playerSummaries).map((p) => ({
-        userKey: p.personaname,
-        status: getStatus(p),
-        away: p.personastate === PersonaState.AWAY || p.personastate === PersonaState.AWAY_ZZZ,
-        offline: p.personastate === PersonaState.OFFLINE,
-      }))
+      getSortedList(playerSummaries).map(
+        (p): CommonGameStatus => ({
+          userKey: p.personaname,
+          status: getStatus(p),
+          away: p.personastate === PersonaState.AWAY || p.personastate === PersonaState.AWAY_ZZZ,
+          offline: p.personastate === PersonaState.OFFLINE,
+        })
+      )
     );
   } catch (e) {
     return {
@@ -58,7 +60,7 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
         };
         return s;
       });
-      const statusPromises = summoners.map(async (summoner) => {
+      const statusPromises = summoners.map(async (summoner): Promise<CommonGameStatus> => {
         const status = await getSummonerStatus(riotApiKey, summoner.region, summoner.id);
         return {
           userKey: summoner.key || summoner.id,
