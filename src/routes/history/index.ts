@@ -100,7 +100,9 @@ export const GET: RequestHandler<{
 };
 
 async function _getLoLMatches(riotApiKey: string) {
-  const players = (settings.leagueOfLegendsPuuidsForMatchHistory || '').split(',');
+  const players = settings.leagueOfLegendsPuuidsForMatchHistory
+    ? settings.leagueOfLegendsPuuidsForMatchHistory.split(',')
+    : [];
   const matchesPromises = players.map(async (v) => {
     const p = v.split('|');
     const player: ProcessedLeagueOfLegendsIds = {
@@ -139,7 +141,9 @@ async function _getLoLMatches(riotApiKey: string) {
 const getLoLMatches = asyncThrottleCache(_getLoLMatches, 5 * 60 * 1000) as typeof _getLoLMatches;
 
 async function _getTFTMatches(riotApiKey: string) {
-  const players = (settings.teamFightTacticsPuuidsForMatchHistory || '').split(',');
+  const players = settings.teamFightTacticsPuuidsForMatchHistory
+    ? settings.teamFightTacticsPuuidsForMatchHistory.split(',')
+    : [];
   const matchesPromises = players.map(async (v) => {
     const p = v.split('|');
     const player: ProcessedLeagueOfLegendsIds = {
@@ -178,15 +182,15 @@ async function _getTFTMatches(riotApiKey: string) {
 const getTFTMatches = asyncThrottleCache(_getTFTMatches, 5 * 60 * 1000);
 
 async function _getPubgMatches(pubgApiKey: string) {
-  const pubgPlayers = (settings.pubgPlayersForMatchHistory || '')
-    .split(',')
-    .map((v): ProcessedPubgIds => {
-      const p = v.split('|');
-      return {
-        platform: p[0],
-        idOrPlayerName: p[1],
-      };
-    });
+  const pubgPlayers = (
+    settings.pubgPlayersForMatchHistory ? settings.pubgPlayersForMatchHistory.split(',') : []
+  ).map((v): ProcessedPubgIds => {
+    const p = v.split('|');
+    return {
+      platform: p[0],
+      idOrPlayerName: p[1],
+    };
+  });
   const isPlayerId = (x: string) => x.match('account.');
   const pubgPlayersWithNames = pubgPlayers
     .filter((p) => !isPlayerId(p.idOrPlayerName))
