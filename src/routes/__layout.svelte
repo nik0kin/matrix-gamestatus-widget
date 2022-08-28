@@ -15,7 +15,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding: 1rem;
+    padding: 0.25rem;
     width: 100%;
     max-width: 1024px;
     margin: 0 auto;
@@ -31,6 +31,10 @@
   }
 
   @media (min-width: 480px) {
+    main {
+      padding-top: 1rem;
+    }
+
     footer {
       padding: 40px 0;
     }

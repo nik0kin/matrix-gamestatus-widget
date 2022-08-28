@@ -23,10 +23,10 @@
 </svelte:head>
 
 <div class="prose steam-status">
-  <h1>Steam Status'</h1>
+  <h1 class="mb-4">Steam Status'</h1>
 
   <button
-    class="btn btn-wide mb-8"
+    class="btn btn-wide mb-4"
     class:loading={loadingNewPage}
     disabled={loadingNewPage}
     on:click={() => {
@@ -37,40 +37,38 @@
     Match History
   </button>
 
-  <div>
-    {#each playerStatus as singlePlayerStatus}
-      <div
-        class="card w-96 bg-base-100 shadow-xl mb-4"
-        style="max-width: 100vw"
-        class:opacity-50={singlePlayerStatus.away}
-        class:opacity-20={singlePlayerStatus.offline}
-      >
-        <div class="p-2">
-          <div class="flex items-center space-x-2">
-            <div
-              class="avatar not-prose"
-              class:online={!singlePlayerStatus.away && !singlePlayerStatus.offline}
-              class:offline={singlePlayerStatus.away || singlePlayerStatus.offline}
-            >
-              <div class="mask mask-squircle bg-base-content h-16 w-16 bg-opacity-10 p-px">
-                {#if singlePlayerStatus.avatarUrl}
-                  <img
-                    src={singlePlayerStatus.avatarUrl}
-                    alt="{singlePlayerStatus.userKey} Steam Avatar"
-                    class="mask mask-squircle"
-                  />
-                {/if}
-              </div>
+  {#each playerStatus as singlePlayerStatus}
+    <div
+      class="card w-96 bg-base-100 shadow-xl mb-2"
+      style="max-width: 100%"
+      class:opacity-50={singlePlayerStatus.away}
+      class:opacity-20={singlePlayerStatus.offline}
+    >
+      <div class="p-2">
+        <div class="flex items-center space-x-2">
+          <div
+            class="avatar not-prose"
+            class:online={!singlePlayerStatus.away && !singlePlayerStatus.offline}
+            class:offline={singlePlayerStatus.away || singlePlayerStatus.offline}
+          >
+            <div class="mask mask-squircle bg-base-content h-12 w-12 bg-opacity-10 p-px">
+              {#if singlePlayerStatus.avatarUrl}
+                <img
+                  src={singlePlayerStatus.avatarUrl}
+                  alt="{singlePlayerStatus.userKey} Steam Avatar"
+                  class="mask mask-squircle"
+                />
+              {/if}
             </div>
-            <div>
-              <div class="text-lg font-extrabold">{singlePlayerStatus.userKey}</div>
-              <div class="text-base-content/70 text-sm">{singlePlayerStatus.status}</div>
-            </div>
+          </div>
+          <div>
+            <div class="text-lg font-extrabold">{singlePlayerStatus.userKey}</div>
+            <div class="text-base-content/70 text-sm">{singlePlayerStatus.status}</div>
           </div>
         </div>
       </div>
-    {/each}
-  </div>
+    </div>
+  {/each}
 </div>
 
 <style>
@@ -78,5 +76,24 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  @media (min-width: 480px) {
+    h1.mb-4 {
+      margin-bottom: 2rem;
+    }
+
+    button.mb-4 {
+      margin-bottom: 2rem;
+    }
+
+    .card.mb-2 {
+      margin-bottom: 1rem;
+    }
+
+    .avatar .h-12.w-12 {
+      width: 4rem;
+      height: 4rem;
+    }
   }
 </style>

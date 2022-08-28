@@ -21,12 +21,12 @@
 </svelte:head>
 
 <div class="prose main-div">
-  <h1>Match History</h1>
+  <h1 class="mb-4">Match History</h1>
 
-  <button class="btn btn-wide mb-8" on:click={() => goto('/status')}> Back </button>
+  <button class="btn btn-wide mb-4" on:click={() => goto('/status')}> Back </button>
 
   {#each matchHistories as match}
-    <div class="card w-96 bg-base-100 shadow-xl mb-4" style="max-width: 100vw">
+    <div class="card w-96 bg-base-100 shadow-xl mb-2" style="max-width: 100%">
       <div class="p-2">
         <div class="flex items-center space-x-2">
           <div>
@@ -64,5 +64,19 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  @media (min-width: 480px) {
+    h1.mb-4 {
+      margin-bottom: 2rem;
+    }
+
+    button.mb-4 {
+      margin-bottom: 2rem;
+    }
+
+    .card.mb-2 {
+      margin-bottom: 1rem;
+    }
   }
 </style>
