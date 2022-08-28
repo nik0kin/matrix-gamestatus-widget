@@ -6,7 +6,6 @@
 
   export let matchHistories: CommonMatchHistory[];
   export let apisUsed: string[];
-  export let error: string | undefined;
 
   onMount(() => {
     // Refresh the page every 10 minutes
@@ -21,51 +20,44 @@
   <meta name="description" content="A list of friend's LoL match history" />
 </svelte:head>
 
-{#if error}
-  <h1>Error</h1>
-  <p>{error}</p>
-{/if}
+<div class="prose main-div">
+  <h1>Match History</h1>
 
-{#if !error}
-  <div class="prose main-div">
-    <h1>Match History</h1>
+  <button class="btn btn-wide mb-8" on:click={() => goto('/status')}> Back </button>
 
-    <button class="btn btn-wide mb-8" on:click={() => goto('/status')}> Back </button>
-
-    {#each matchHistories as match}
-      <div class="card w-96 bg-base-100 shadow-xl mb-4" style="max-width: 100vw">
-        <div class="p-2">
-          <div class="flex items-center space-x-2">
-            <div>
-              <div class="text-lg font-extrabold">{match.userKey} - {match.game}</div>
-              <div class="text-base-content/70 text-xs mb-1">
-                {new Date(match.date).toLocaleString([], {
-                  year: '2-digit',
-                  month: 'numeric',
-                  day: 'numeric',
-                  hour: 'numeric',
-                  minute: '2-digit',
-                })} - {formatDuration(match.length)}
-              </div>
-              <div class="text-base-content/70 text-sm">{match.status}</div>
+  {#each matchHistories as match}
+    <div class="card w-96 bg-base-100 shadow-xl mb-4" style="max-width: 100vw">
+      <div class="p-2">
+        <div class="flex items-center space-x-2">
+          <div>
+            <div class="text-lg font-extrabold">{match.userKey} - {match.game}</div>
+            <div class="text-base-content/70 text-xs mb-1">
+              {new Date(match.date).toLocaleString([], {
+                year: '2-digit',
+                month: 'numeric',
+                day: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+              })} - {formatDuration(match.length)}
             </div>
+            <div class="text-base-content/70 text-sm">{match.status}</div>
           </div>
         </div>
       </div>
-    {/each}
-    <br />
-    <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
-    <br />
-    {#if apisUsed.includes('riotgames')}
-      <p>
-        matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
-        opinions of Riot Games or anyone officially involved in producing or managing Riot Games
-        properties. Riot Games, and all associated properties are trademarks or registered
-        trademarks of Riot Games, Inc.
-      </p>
-    {/if}
-  </div>
-{/if}
+    </div>
+  {/each}
+  <br />
+  <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
+  <br />
+  {#if apisUsed.includes('riotgames')}
+    <p>
+      matrix-gamestatus-widget isn't endorsed by Riot Games and doesn't reflect the views or
+      opinions of Riot Games or anyone officially involved in producing or managing Riot Games
+      properties. Riot Games, and all associated properties are trademarks or registered trademarks
+      of Riot Games, Inc.
+    </p>
+  {/if}
+</div>
 
 <style>
   .main-div {

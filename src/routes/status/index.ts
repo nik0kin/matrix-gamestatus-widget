@@ -9,15 +9,9 @@ import { getSortedList, getStatus } from './_status-helpers';
 
 const settings = getEnvSettings();
 
-export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: string }> = async ({
-  locals,
-}) => {
+export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async ({ locals }) => {
   if (!settings.debug && !isUserAuthed(locals.userid)) {
-    return {
-      body: {
-        error: 'Unauthed',
-      },
-    };
+    throw new Error('Unauthed');
   }
   console.log(`${locals.userid} authorized to view status`);
 
@@ -41,11 +35,7 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
       )
     );
   } catch (e) {
-    return {
-      body: {
-        error: 'Get ISteamUser.GetPlayerSummaries API error: ' + JSON.stringify(e),
-      },
-    };
+    throw new Error('Get ISteamUser.GetPlayerSummaries API error: ' + JSON.stringify(e));
   }
 
   // LoL, not including TFT - Riot Games
@@ -78,11 +68,7 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[]; error?: st
       playerStatus = playerStatus.concat(await Promise.all(statusPromises));
     }
   } catch (e) {
-    return {
-      body: {
-        error: 'LoL GetCurrentGameInfoBySummoner API error: ' + JSON.stringify(e),
-      },
-    };
+    throw new Error('LoL GetCurrentGameInfoBySummoner API error: ' + JSON.stringify(e));
   }
 
   return {

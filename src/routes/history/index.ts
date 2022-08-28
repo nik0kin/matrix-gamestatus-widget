@@ -21,14 +21,9 @@ const settings = getEnvSettings();
 
 export const GET: RequestHandler<{
   matchHistories?: CommonMatchHistory[];
-  error?: string;
 }> = async ({ locals }) => {
   if (!settings.debug && !isUserAuthed(locals.userid)) {
-    return {
-      body: {
-        error: 'Unauthed',
-      },
-    };
+    throw new Error('Unauthed');
   }
   console.log(`${locals.userid} authorized to view history`);
 
@@ -48,11 +43,13 @@ export const GET: RequestHandler<{
       }
     }
   } catch (e) {
-    return {
-      body: {
-        error: 'LoL getLastLoLMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
-      },
-    };
+    console.error(
+      'LoL getLastLoLMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e))
+    );
+
+    throw new Error(
+      'LoL getLastLoLMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e))
+    );
   }
 
   // TFT - Riot Games
@@ -66,11 +63,9 @@ export const GET: RequestHandler<{
       }
     }
   } catch (e) {
-    return {
-      body: {
-        error: 'TFT getLastTFTMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
-      },
-    };
+    throw new Error(
+      'TFT getLastTFTMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e))
+    );
   }
 
   // PUBG - Krafton
@@ -84,11 +79,9 @@ export const GET: RequestHandler<{
       }
     }
   } catch (e) {
-    return {
-      body: {
-        error: 'PUBG getPubgMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e)),
-      },
-    };
+    throw new Error(
+      'PUBG getPubgMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e))
+    );
   }
 
   return {
