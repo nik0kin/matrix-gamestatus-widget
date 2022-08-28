@@ -1,4 +1,6 @@
 <script lang="ts">
+  import pkg from 'lodash';
+  const { uniqBy } = pkg;
   import { onMount } from 'svelte';
   import { goto } from '$app/navigation';
   import type { CommonMatchHistory } from '$lib/common-game-status';
@@ -7,12 +9,48 @@
   export let matchHistories: CommonMatchHistory[];
   export let apisUsed: string[];
 
+  $: combinedMatchHistories =
+    // Remove duplicates
+    uniqBy(matchHistories, ({ date, game, length }) => date + game + length)
+      // Create CombinedMatchHistory
+      .map((commonMatchHistory): CombinedMatchHistory => {
+        // not efficient but w/e since we aren't dealing with 100s of matches
+        const players = matchHistories
+          .filter((cmh) => {
+            return (
+              cmh.date === commonMatchHistory.date &&
+              cmh.game === commonMatchHistory.game &&
+              cmh.length === commonMatchHistory.length
+            );
+          })
+          .map(({ userKey, status }) => ({ userKey, status }));
+
+        return {
+          ...commonMatchHistory,
+          players,
+        };
+      });
+
+  interface CombinedMatchHistory extends CommonMatchHistory {
+    players: Array<{ userKey: string; status: string }>;
+  }
+
   onMount(() => {
     // Refresh the page every 10 minutes
     setTimeout(() => {
       location.reload();
     }, 10 * 60 * 1000);
   });
+
+  function formatMatchDate(date: number) {
+    return new Date(date).toLocaleString([], {
+      year: '2-digit',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+    });
+  }
 </script>
 
 <svelte:head>
@@ -25,22 +63,31 @@
 
   <button class="btn btn-wide mb-4" on:click={() => goto('/status')}> Back </button>
 
-  {#each matchHistories as match}
+  {#each combinedMatchHistories as match}
     <div class="card w-96 bg-base-100 shadow-xl mb-2" style="max-width: 100%">
       <div class="p-2">
         <div class="flex items-center space-x-2">
           <div>
-            <div class="text-lg font-extrabold">{match.userKey} - {match.game}</div>
-            <div class="text-base-content/70 text-xs mb-1">
-              {new Date(match.date).toLocaleString([], {
-                year: '2-digit',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit',
-              })} - {formatDuration(match.length)}
+            <div class="text-lg font-extrabold">
+              {#if match.players.length === 1}
+                {match.userKey} -
+              {/if}
+              {match.game}
             </div>
-            <div class="text-base-content/70 text-sm">{match.status}</div>
+            <div class="text-base-content/70 text-xs mb-1">
+              {formatMatchDate(match.date)} - {formatDuration(match.length)}
+            </div>
+            <div class="text-base-content/70 text-sm">
+              {#if match.players.length === 1}
+                {match.status}
+              {/if}
+              {#if match.players.length > 1}
+                {#each match.players as player}
+                  <span class="font-extrabold">{player.userKey}</span>&nbsp;
+                  {player.status}<br />
+                {/each}
+              {/if}
+            </div>
           </div>
         </div>
       </div>
