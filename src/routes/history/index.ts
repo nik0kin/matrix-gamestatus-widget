@@ -30,6 +30,8 @@ export const GET: RequestHandler<{
   let matchHistories: CommonMatchHistory[] = [];
   const apisUsed: string[] = [];
 
+  console.log('Start fetching matches ', Date.now());
+
   const { riotApiKey, pubgApiKey } = settings;
 
   // Lol - Riot Games
@@ -83,6 +85,8 @@ export const GET: RequestHandler<{
       'PUBG getPubgMatches() error: ' + JSON.stringify(e, Object.getOwnPropertyNames(e))
     );
   }
+
+  console.log('End fetching matches ', Date.now());
 
   return {
     body: {

@@ -10,6 +10,8 @@
   onMount(() => {
     // Refresh the page every 60 seconds
     setTimeout(() => {
+      if (loadingNewPage) return;
+
       location.reload();
     }, 60 * 1000);
   });

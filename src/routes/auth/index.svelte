@@ -49,9 +49,14 @@
   <meta name="description" content="Authing with matrix" />
 </svelte:head>
 
-<div class="loading">
+<div class="loading prose">
   <h1>Loading</h1>
 </div>
 
 <style>
+  .loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 </style>
