@@ -36,10 +36,10 @@
   }
 
   onMount(() => {
-    // Refresh the page every 10 minutes
+    // Refresh the page every 5 minutes
     setTimeout(() => {
       location.reload();
-    }, 10 * 60 * 1000);
+    }, 5 * 60 * 1000);
   });
 
   function formatMatchDate(date: number) {
@@ -64,7 +64,7 @@
   <button class="btn btn-wide mb-4" on:click={() => goto('/status')}> Back </button>
 
   {#each combinedMatchHistories as match}
-    <div class="card w-96 bg-base-100 shadow-xl mb-2" style="max-width: 100%">
+    <div class="card bg-base-100 shadow-xl mb-2" style="max-width: 100%">
       <div class="p-2">
         <div class="flex items-center space-x-2">
           <div>
@@ -111,6 +111,10 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .card {
+    width: 30rem;
   }
 
   @media (min-width: 480px) {

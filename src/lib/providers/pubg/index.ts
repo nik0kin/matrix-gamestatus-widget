@@ -1,4 +1,5 @@
 import { formatNumber } from '$lib/utils/format-number';
+import { formatDuration } from '$lib/utils/format-time';
 import {
   getGameMode,
   getMapName,
@@ -66,7 +67,9 @@ export function getMatchHistoryString(playerId: string, match: GetMatchResponse)
   } - ${participant.attributes.stats.kills} kills - ${formatNumber(
     participant.attributes.stats.damageDealt,
     1
-  )} damage - ${formatNumber(distanceTraveled / 1000, 2)} km${ai}`;
+  )} damage - survived ${formatDuration(
+    participant.attributes.stats.timeSurvived * 1000
+  )} - ${formatNumber(distanceTraveled / 1000, 2)} km${ai}`;
 }
 
 function getBotCount(match: GetMatchResponse) {
