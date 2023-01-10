@@ -1,12 +1,20 @@
 import pkg from 'lodash';
-const { memoize } = pkg;
+const { isArray, memoize } = pkg;
 
 async function getTFTMatchIdsByPuuid(apiKey: string, puuid: string, regionId: string, count = 20) {
   const baseUrl = `https://${regionId}.api.riotgames.com`;
   const url = `${baseUrl}/tft/match/v1/matches/by-puuid/${puuid}/ids?api_key=${apiKey}&count=${count}`;
   const response = await fetch(url);
   console.log('fetching ' + url);
-  return (await response.json()) as string[];
+  const data = (await response.json()) as string[];
+
+  if (!data || !isArray(data)) {
+    const errorMsg = 'Bad getTFTMatchIdsByPuuid() response';
+    console.error(errorMsg, data);
+    throw new Error(errorMsg);
+  }
+
+  return data;
 }
 
 interface TFTParticipantDto {

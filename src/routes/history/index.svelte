@@ -5,9 +5,11 @@
   import { goto } from '$app/navigation';
   import type { CommonMatchHistory } from '$lib/common-game-status';
   import { formatDuration } from '$lib/utils/format-time';
+  import type { GetMatchHistoriesResponse } from './_response-types';
 
-  export let matchHistories: CommonMatchHistory[];
-  export let apisUsed: string[];
+  export let matchHistories: GetMatchHistoriesResponse['matchHistories'];
+  export let apisUsed: GetMatchHistoriesResponse['apisUsed'];
+  export let providerErrors: GetMatchHistoriesResponse['providerErrors'];
 
   $: combinedMatchHistories =
     // Remove duplicates
@@ -95,6 +97,12 @@
   {/each}
   <br />
   <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
+  {#if providerErrors}
+    <br />
+    <div class="tooltip tooltip-bottom" data-tip={providerErrors.join('\n')}>
+      <strong>Match History fetch ERRORS occurred</strong>
+    </div>
+  {/if}
   <br />
   {#if apisUsed.includes('riotgames')}
     <p>

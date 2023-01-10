@@ -1,5 +1,5 @@
 import pkg from 'lodash';
-const { memoize } = pkg;
+const { memoize, isArray } = pkg;
 
 interface LoLGameInfoParticipant {
   teamId: number;
@@ -63,7 +63,15 @@ export async function getLoLMatchIdsByPuuid(
   const url = `${baseUrl}/lol/match/v5/matches/by-puuid/${puuid}/ids?api_key=${apiKey}&count=${count}`;
   const response = await fetch(url);
   console.log('fetching ' + url);
-  return (await response.json()) as string[];
+  const data = (await response.json()) as string[];
+
+  if (!data || !isArray(data)) {
+    const errorMsg = 'Bad getLoLMatchIdsByPuuid() response';
+    console.error(errorMsg, data);
+    throw new Error(errorMsg);
+  }
+
+  return data;
 }
 
 interface LoLParticipantDto {
@@ -116,6 +124,7 @@ async function _getMatchById(apiKey: string, matchId: string, regionId: string) 
   const response = await fetch(url);
   console.log('fetching ' + url);
   const payload = (await response.json()) as LoLMatchDto;
+
   if (!payload.info) throw new Error('Issue with payload: ' + JSON.stringify(payload));
   return payload;
 }
