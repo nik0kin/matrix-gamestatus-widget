@@ -16,6 +16,9 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async 
   console.log(`${locals.userid} authorized to view status`);
 
   let playerStatus: CommonGameStatus[] = [];
+  const providerErrors: string[] = [];
+
+  // TODO genericize status-getter (like history)
 
   // Steam
   try {
@@ -35,7 +38,13 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async 
       )
     );
   } catch (e) {
-    throw new Error('Get ISteamUser.GetPlayerSummaries API error: ' + JSON.stringify(e));
+    const stringifiedError = JSON.stringify(e, Object.getOwnPropertyNames(e));
+    const errorMsg =
+      'Get ISteamUser.GetPlayerSummaries API error: ' +
+      (e instanceof Error ? e.message : stringifiedError);
+    providerErrors.push(errorMsg);
+    console.error(errorMsg);
+    console.error(stringifiedError);
   }
 
   // LoL, not including TFT - Riot Games
@@ -68,12 +77,19 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async 
       playerStatus = playerStatus.concat(await Promise.all(statusPromises));
     }
   } catch (e) {
-    throw new Error('LoL GetCurrentGameInfoBySummoner API error: ' + JSON.stringify(e));
+    const stringifiedError = JSON.stringify(e, Object.getOwnPropertyNames(e));
+    const errorMsg =
+      'LoL GetCurrentGameInfoBySummoner API error: ' +
+      (e instanceof Error ? e.message : stringifiedError);
+    providerErrors.push(errorMsg);
+    console.error(errorMsg);
+    console.error(stringifiedError);
   }
 
   return {
     body: {
       playerStatus,
+      providerErrors,
     },
   };
 };

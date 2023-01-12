@@ -44,5 +44,11 @@ export async function getPlayerSummariesFromSteamApi(webapiKey: string, steamIds
     ','
   )}`;
   const response = await fetch(url);
-  return ((await response.json()) as PlayerSummariesResponse).response.players;
+  const data = (await response.json()) as PlayerSummariesResponse;
+
+  if (!data.response) {
+    throw new Error('Bad getPlayerSummariesFromSteamApi() response: ' + JSON.stringify(data));
+  }
+
+  return data.response.players;
 }

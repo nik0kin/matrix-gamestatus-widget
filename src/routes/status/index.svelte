@@ -4,6 +4,7 @@
   import type { CommonGameStatus } from '$lib/common-game-status';
 
   export let playerStatus: CommonGameStatus[];
+  export let providerErrors: string[];
 
   let loadingNewPage: boolean = false;
 
@@ -69,6 +70,13 @@
       </div>
     </div>
   {/each}
+  <br />
+  {#if providerErrors && providerErrors.length}
+    <br />
+    <div class="tooltip tooltip-bottom" data-tip={providerErrors.join('\n')}>
+      <strong>Status fetch ERRORS occurred</strong>
+    </div>
+  {/if}
 </div>
 
 <style>

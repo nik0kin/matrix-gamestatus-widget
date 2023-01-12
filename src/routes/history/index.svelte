@@ -97,7 +97,7 @@
   {/each}
   <br />
   <button class="btn btn-wide" on:click={() => goto('/status')}> Back </button>
-  {#if providerErrors}
+  {#if providerErrors && providerErrors.length}
     <br />
     <div class="tooltip tooltip-bottom" data-tip={providerErrors.join('\n')}>
       <strong>Match History fetch ERRORS occurred</strong>
