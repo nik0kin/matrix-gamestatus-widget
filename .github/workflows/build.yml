@@ -1,0 +1,21 @@
+name: Build
+
+on:
+  push:
+    # branches:
+    #   - main
+
+jobs:
+  build-sveltekit-widget:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: yarn
+      - name: Build
+        run: yarn build
+      # - name: Test
+      #   run: yarn test
