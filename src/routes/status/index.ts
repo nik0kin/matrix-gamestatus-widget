@@ -49,8 +49,8 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async 
 
   // LoL, not including TFT - Riot Games
   try {
-    const { riotApiKey } = settings;
-    if (riotApiKey) {
+    const { leagueOfLegendsRiotApiKey } = settings;
+    if (leagueOfLegendsRiotApiKey) {
       const summoners = (
         settings.leagueOfLegendsSummonerIdsForStatus
           ? settings.leagueOfLegendsSummonerIdsForStatus.split(',')
@@ -65,7 +65,11 @@ export const GET: RequestHandler<{ playerStatus?: CommonGameStatus[] }> = async 
         return s;
       });
       const statusPromises = summoners.map(async (summoner): Promise<CommonGameStatus> => {
-        const status = await getSummonerStatus(riotApiKey, summoner.id, summoner.region);
+        const status = await getSummonerStatus(
+          leagueOfLegendsRiotApiKey,
+          summoner.id,
+          summoner.region
+        );
         return {
           userKey: summoner.key || summoner.id,
           status,

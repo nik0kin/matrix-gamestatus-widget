@@ -18,12 +18,12 @@ import { wait } from '$lib/utils/async-wait';
 const settings = getEnvSettings();
 
 async function _getLoLMatches() {
-  const { riotApiKey } = settings;
+  const { leagueOfLegendsRiotApiKey } = settings;
   const players = settings.leagueOfLegendsPuuidsForMatchHistory
     ? settings.leagueOfLegendsPuuidsForMatchHistory.split(',')
     : [];
 
-  if (!riotApiKey || !players.length) {
+  if (!leagueOfLegendsRiotApiKey || !players.length) {
     return [];
   }
 
@@ -38,7 +38,12 @@ async function _getLoLMatches() {
 
     // get last x matches
     const count = (20 - players.length) / players.length; // allow 1 api call to look up matches, then rest go to lookup matches
-    const lastMatches = await getLastLoLMatches(riotApiKey, puuid, 'americas', count);
+    const lastMatches = await getLastLoLMatches(
+      leagueOfLegendsRiotApiKey,
+      puuid,
+      'americas',
+      count
+    );
 
     // convert it to a common match history object
     return lastMatches.map(
@@ -68,12 +73,12 @@ export const getLoLMatches = asyncThrottleCache(
 ) as typeof _getLoLMatches;
 
 async function _getTFTMatches() {
-  const { riotApiKey } = settings;
+  const { teamFightTacticsRiotApiKey } = settings;
   const players = settings.teamFightTacticsPuuidsForMatchHistory
     ? settings.teamFightTacticsPuuidsForMatchHistory.split(',')
     : [];
 
-  if (!riotApiKey || !players.length) {
+  if (!teamFightTacticsRiotApiKey || !players.length) {
     return [];
   }
 
@@ -88,7 +93,12 @@ async function _getTFTMatches() {
 
     // get last x matches
     const count = (20 - players.length) / players.length; // allow 1 api call to look up matches, then rest go to lookup matches
-    const lastMatches = await getLastTFTMatches(riotApiKey, puuid, 'americas', count);
+    const lastMatches = await getLastTFTMatches(
+      teamFightTacticsRiotApiKey,
+      puuid,
+      'americas',
+      count
+    );
 
     // convert it to a common match history object
     return lastMatches.map(

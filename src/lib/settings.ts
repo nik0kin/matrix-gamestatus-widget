@@ -13,11 +13,11 @@ export interface Settings {
   steamFriendIdsForStatus: string;
 
   /**
-   * Riot api key
+   * Riot api key used for League of Leagues stats
    *   Generate at https://developer.riotgames.com/
    *   Note that id/puuid's used down below are encrypted and tied to the key, so if you use a new key, you'll have to get a new set of id/puuids's
    */
-  riotApiKey?: string;
+  leagueOfLegendsRiotApiKey?: string;
   /**
    * Comma separated list of regions and summoner id's to query for status message
    * Eg. "leagueOfLegendsSummonerIdsForStatus=na1|summonerId123|BOB,na1|summonerId456|KING"
@@ -30,10 +30,17 @@ export interface Settings {
    *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
    */
   leagueOfLegendsPuuidsForMatchHistory?: string;
+
+  /**
+   * Riot api key used for Teamfight Tactics stats
+   *   Generate at https://developer.riotgames.com/
+   *   Note that id/puuid's used down below are encrypted and tied to the key, so if you use a new key, you'll have to get a new set of id/puuids's
+   */
+  teamFightTacticsRiotApiKey?: string;
   /**
    * Comma separated list of regions and summoner id's to query for match history
    * Eg. "teamFightTacticsPuuidsForMatchHistory=americas|puuid123|BOB,americas|puuid456|KING"
-   *   Use https://<region>.api.riotgames.com/lol/summoner/v4/summoners/by-name/<name>?api_key=<key> to get puuid
+   *   Use https://<region>.api.riotgames.com/tft/summoner/v1/summoners/by-name/<name>?api_key=<key> to get puuid
    */
   teamFightTacticsPuuidsForMatchHistory?: string;
 

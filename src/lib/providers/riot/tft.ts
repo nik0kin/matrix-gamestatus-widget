@@ -12,6 +12,7 @@ async function getTFTMatchIdsByPuuid(apiKey: string, puuid: string, regionId: st
     const errorMsg = 'Bad getTFTMatchIdsByPuuid() response';
     console.error(errorMsg, data);
     throw new Error(errorMsg);
+    // TODO an error here isnt being handled correctly (when multiple TFT players)
   }
 
   return data;

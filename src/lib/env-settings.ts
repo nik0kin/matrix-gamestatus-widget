@@ -6,9 +6,10 @@ dotenv.config();
 const {
   steamWebApiKey,
   steamFriendIdsForStatus,
-  riotApiKey,
+  leagueOfLegendsRiotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
   leagueOfLegendsPuuidsForMatchHistory,
+  teamFightTacticsRiotApiKey,
   teamFightTacticsPuuidsForMatchHistory,
   pubgApiKey,
   pubgPlayersForMatchHistory,
@@ -18,9 +19,10 @@ const {
 const settings = {
   steamWebApiKey,
   steamFriendIdsForStatus,
-  riotApiKey,
+  leagueOfLegendsRiotApiKey,
   leagueOfLegendsSummonerIdsForStatus,
   leagueOfLegendsPuuidsForMatchHistory,
+  teamFightTacticsRiotApiKey,
   teamFightTacticsPuuidsForMatchHistory,
   pubgApiKey,
   pubgPlayersForMatchHistory,
